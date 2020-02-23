@@ -1,7 +1,7 @@
 import sys
 import json
-import dateutil.parser
-import babel
+
+
 from flask import Flask, render_template, request, Response, flash, redirect, url_for, jsonify
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
@@ -166,16 +166,7 @@ def update_moive(id):
         'updated_id': id
     })
 
-'''
-Parser
-'''
-def format_datetime(value, format='medium'):
-  date = dateutil.parser.parse(value)
-  if format == 'full':
-      format="EEEE MMMM, d, y 'at' h:mma"
-  elif format == 'medium':
-      format="EE MM, dd, y h:mma"
-  return babel.dates.format_datetime(date, format)
+
 '''
 default port:
 '''

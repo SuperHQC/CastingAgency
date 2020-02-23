@@ -2,6 +2,8 @@ import os
 from sqlalchemy import Column, String, Integer, DateTime, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
+# import babel
+# import dateutil.parser
 
 database_name = "casting_agency"
 database_path = "postgres://{}/{}".format('localhost:5432', database_name)
@@ -47,8 +49,19 @@ class Movie(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'release': self.release,
+            'release': self.release.strftime("%Y %B %d"),
         }
+
+# '''
+# Parser
+# '''
+# def format_datetime(value, format='medium'):
+#   date = dateutil.parser.parse(value)
+#   if format == 'full':
+#       format="EEEE MMMM, d, y 'at' h:mma"
+#   elif format == 'medium':
+#       format="EE MM, dd, y h:mma"
+#   return babel.dates.format_datetime(date, format)
 
 '''
 Actor
