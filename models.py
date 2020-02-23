@@ -28,6 +28,28 @@ class Movie(db.Model):
     title = Column(String)
     release = Column(DateTime)
 
+    def __init__(self, title, release):
+        self.title = title
+        self.release = release
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(sefl):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'release': self.release,
+        }
+
 '''
 Actor
 '''

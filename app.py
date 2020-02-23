@@ -38,6 +38,10 @@ migrate = Migrate(app, db)
 '''
 Controllers
 '''
+
+'''
+/actors
+'''
 @app.route('/')
 def hello():
     return jsonify({
@@ -99,13 +103,79 @@ def update_actor(id):
     actor.name = new_name
     actor.age = new_age
     actor.gender = new_gender
-    
+
     actor.update()
     return jsonify({
         'success': True,
         'updated_id': id
     })
 
+'''
+/movies
+'''
+
+@app.route('/movies', methods=['GET'])
+def get_movies():
+    movies = [m.format() for m in Movie.query.all()]
+    return jsonify({
+        'success': True,
+        'movies': movies
+    })
+
+@app.route('/movies', methods=['POST'])
+def create_movie():
+
+    body = request.get_json()
+
+    new_title = body.get('title', None)
+    new_release = body.get('release', None)
+
+    new_movie = Movie(
+        title= new_title,
+        release= new_release
+    )
+
+    new_movie.insert()
+    return jsonify({
+        'success': True,
+        'new_actor_id': new_movie.id,
+    })
+
+@app.route('/movies/<int:id>', methods=['DELETE'])
+def delete_movie(id):
+    movie = Movie.query.filter(Movie.id==id).one_or_none()
+    movie.delete()
+    return jsonify({
+        'success': True,
+        'deleted_id': id
+    })
+
+@app.route('/movies/<int:id>', methods=['PATCH'])
+def update_moive(id):
+    movie = Movie.query.filter(Movie.id==id).one_or_none()
+    body = request.get_json()
+    
+    new_title = body.get('title', None)
+    new_release = body.get('release', None)
+
+    movie.title = new_title
+    movie.release = new_release
+    movie.update()
+    return jsonify({
+        'success': True,
+        'updated_id': id
+    })
+
+'''
+Parser
+'''
+def format_datetime(value, format='medium'):
+  date = dateutil.parser.parse(value)
+  if format == 'full':
+      format="EEEE MMMM, d, y 'at' h:mma"
+  elif format == 'medium':
+      format="EE MM, dd, y h:mma"
+  return babel.dates.format_datetime(date, format)
 '''
 default port:
 '''
